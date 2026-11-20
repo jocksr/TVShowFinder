@@ -1,5 +1,8 @@
 const showSelect = document.getElementById("show-select");
 const showDetails = document.getElementById("show-details");
+const message = document.getElementById("message");
+
+function setMessage(text) { message.textContent = text; }
 
 function fillDropdown(shows) {
     showSelect.textContent = "";
@@ -18,6 +21,9 @@ function fillDropdown(shows) {
 
 async function loadShows() {
     const url = "https://api.tvmaze.com/shows?page=0";
+    const errorMessage = "Unable to load shows. Please try again.";
+    setMessage("Loading shows...");
+
     try {
         const res = await fetch(url);
         if (!res.ok) { throw new Error(`Request failed with status ${res.status}`); }
@@ -29,8 +35,12 @@ async function loadShows() {
         });
         const topShows = shows.slice(0, 25);
         fillDropdown(topShows);
+        setMessage("");
     } 
-    catch (error) { console.error(error); }
+    catch (error) {
+        console.error(error);
+        setMessage(errorMessage);
+    }
 }
 
 function displayDetails(show) {
@@ -76,15 +86,26 @@ function displayDetails(show) {
 
 async function loadShowDetails(id) {
     const url = `https://api.tvmaze.com/shows/${id}`;
+    let errorMessage = "Unable to load show details. Please try again.";
+    setMessage("Loading show details...");
     try {
         const res = await fetch(url);
-        if (!res.ok) { throw new Error(`Request failed with status ${res.status}`); }
-
+        if (!res.ok) {
+            // Give a missing show its own specific error message.
+            if (res.status === 404) {
+                errorMessage = "The show could not be found.";
+                throw new Error(errorMessage);
+            }
+            throw new Error(`Request failed with status ${res.status}`);
+        }
         const show = await res.json();
-
         displayDetails(show);
+        setMessage("");
     } 
-    catch (error) { console.error(error); }
+    catch (error) {
+        console.error(error);
+        setMessage(errorMessage);
+    }
 }
 
 showSelect.addEventListener("change", function () {
