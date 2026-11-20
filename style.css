@@ -1,0 +1,359 @@
+/* In your HTML head: <link rel="stylesheet" href="style.css"> */
+
+:root {
+    color-scheme: dark;
+    --background: #0b1220;
+    --surface: #152238;
+    --border: #344860;
+    --text: #f4f1e9;
+    --muted: #b3c0d2;
+    --accent: #76e3cf;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background:
+        radial-gradient(ellipse at top left, #1b3843, transparent 55%),
+        var(--background);
+}
+
+body {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    color: var(--text);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+h1 {
+    margin: 0 0 2.5rem;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    text-align: center;
+}
+
+h1::after {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 4px;
+    margin: 1.2rem auto 0;
+    border-radius: 4px;
+    background: var(--accent);
+}
+
+/* Dropdown */
+
+label[for="show-select"] {
+    display: block;
+    margin-bottom: 0.65rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+#show-select {
+    appearance: none;
+    width: 100%;
+    min-width: 0;
+    min-height: 54px;
+    padding: 0.9rem 3rem 0.9rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: var(--surface);
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+        linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+    background-position:
+        calc(100% - 23px) center,
+        calc(100% - 17px) center;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+#show-select:hover {
+    border-color: var(--accent);
+}
+
+#show-select:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 6px rgb(118 227 207 / 10%);
+}
+
+#show-select option {
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+/* Loading and error messages */
+
+#message {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+#message:not(:empty) {
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+}
+
+/*
+   These state styles require class="loading" or class="error"
+   on #message. CSS cannot distinguish messages by their text alone.
+*/
+
+#message.loading {
+    border-color: #386b70;
+    background: #15343c;
+    color: #b0f7eb;
+}
+
+#message.loading:not(:empty)::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #4e7478;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+#message.error {
+    border-color: #a15563;
+    background: #3b202c;
+    color: #ffd1d9;
+}
+
+#message.error:not(:empty)::before {
+    content: "!";
+    flex: 0 0 auto;
+    width: 21px;
+    height: 21px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+}
+
+/* Details card */
+
+#show-details {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 1fr);
+    column-gap: 2rem;
+    row-gap: 0.8rem;
+    align-items: start;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: 0 20px 50px rgb(0 0 0 / 25%);
+}
+
+#show-details:empty {
+    display: none;
+}
+
+#show-details > * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+#show-details > h2 {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.65rem, 3vw, 2.3rem);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+}
+
+/* Poster and "No poster available" message */
+
+#show-details > img,
+#show-details > h2 + p {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    width: 100%;
+    max-width: 210px;
+    margin: 0;
+    border: 1px solid #465a73;
+    border-radius: 12px;
+}
+
+#show-details > img {
+    display: block;
+    height: auto;
+    max-height: 340px;
+    object-fit: contain;
+    box-shadow: 0 12px 25px rgb(0 0 0 / 25%);
+}
+
+#show-details > h2 + p {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 2 / 3;
+    padding: 1.25rem;
+    border-style: dashed;
+    background: #0f1a2b;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* Summary */
+
+#show-details > div {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0.4rem 0 0.6rem;
+    color: #d3dce7;
+    line-height: 1.8;
+}
+
+#show-details > div p {
+    margin: 0 0 1rem;
+}
+
+#show-details > div > :last-child {
+    margin-bottom: 0;
+}
+
+#show-details b,
+#show-details strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+#show-details ul,
+#show-details ol {
+    margin: 0 0 1rem;
+    padding-left: 1.4rem;
+}
+
+#show-details li + li {
+    margin-top: 0.35rem;
+}
+
+#show-details li::marker {
+    color: var(--accent);
+}
+
+/* Genres, premiere date, status, and rating */
+
+#show-details > p:not(:nth-child(2)) {
+    grid-column: 2;
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Links */
+
+a {
+    color: var(--accent);
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+}
+
+a:hover {
+    color: #c8fff3;
+}
+
+a:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 3px;
+}
+
+/* Phones and narrow browser windows */
+
+@media (max-width: 640px) {
+    body {
+        padding: 2rem 1rem;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+
+    #show-details {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1.25rem;
+        border-radius: 16px;
+    }
+
+    #show-details > h2 {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    #show-details > img,
+    #show-details > h2 + p {
+        grid-column: 1;
+        grid-row: 2;
+        justify-self: center;
+        margin: 0.25rem 0;
+    }
+
+    #show-details > div {
+        grid-column: 1;
+        grid-row: 3;
+    }
+
+    #show-details > p:not(:nth-child(2)) {
+        grid-column: 1;
+        grid-row: auto;
+    }
+}
+
+/* Loading animation */
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #message.loading::before {
+        animation: none;
+    }
+
+    #show-select {
+        transition: none;
+    }
+}
